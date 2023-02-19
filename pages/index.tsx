@@ -52,15 +52,18 @@ export default function Home({ call }: any) {
       env: "staging",
       // spam: true,
     });
+
     setNotifications(notification);
+
     console.log(notification);
   }
   async function getdeNotification() {
     const notification: Notification[] = await PushAPI.user.getFeeds({
       user: `eip155:5:${user.user?.address}`, // user address in CAIP
       env: "staging",
-      // spam: true,
+      spam: true,
     });
+
     setdeNotifications(notification);
     console.log(notification);
   }
@@ -70,12 +73,14 @@ export default function Home({ call }: any) {
       // for (let i = 0; i < a.length; i++) {
       //   console.log(channelData(a[i].channel));
       // }
-      getNotification();
+      getNotification().then(() => {});
+      getdeNotification().then(() => {});
     }
-  }, [user.isLoggedIn]);
+  }, [user]);
 
   const Reload = async () => {
     await getNotification();
+    await getdeNotification();
     console.log("reload");
   };
   async function Notify() {
@@ -113,7 +118,7 @@ export default function Home({ call }: any) {
 
             <button
               className="p-3 rounded-md bg-gray-500/30 text-white"
-              onClick={() => send()}
+              onClick={() => user.logout()}
             >
               Logout
             </button>
